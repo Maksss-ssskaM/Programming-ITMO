@@ -10,3 +10,10 @@
 picture)</p>
 
 ![image](https://user-images.githubusercontent.com/73906341/130318705-93e987f6-85c3-47f0-8347-a69744628648.png)
+
+<p>After compilation:</p>
+![image](https://user-images.githubusercontent.com/73906341/130319034-db9b26b6-f131-4cf1-8a5a-9dd9ab23b44d.png)
+
+![image](https://user-images.githubusercontent.com/73906341/130319069-0ad002a7-5331-4e8f-85d9-3c3c17ad0be5.png)
+
+![image](https://user-images.githubusercontent.com/73906341/130319076-cc256fb9-3360-488b-9a53-9ecefa72820b.png)
