@@ -11,7 +11,7 @@ picture)</p>
 
 ![image](https://user-images.githubusercontent.com/73906341/130318705-93e987f6-85c3-47f0-8347-a69744628648.png)
 
-<p>After compilation:</p>
+<h1>After compilation:</h1>
 
 ![image](https://user-images.githubusercontent.com/73906341/130319034-db9b26b6-f131-4cf1-8a5a-9dd9ab23b44d.png)
 
