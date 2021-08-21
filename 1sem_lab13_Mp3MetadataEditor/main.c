@@ -2,21 +2,21 @@
 #include <locale.h>
 struct tag
 {
-    char id[3];//3
-    char vers;//1
-    char subvers;//1
-    int flag; //1
-    int size; //4
-}; //всего 10
+    char id[3];
+    char vers;
+    char subvers;
+    int flag;
+    int size;
+};
 
 struct frame
 {
-    char name[4]; //4
-    int size; //2
-    char f1, f2;//2
+    char name[4];
+    int size;
+    char f1, f2;
 };
 
-void Copy(FILE *Input, FILE *Output) //откуда и куда
+void Copy(FILE *Input, FILE *Output)
 {
     int Char;
     while ((Char = getc(Input)) != EOF)
@@ -25,7 +25,7 @@ void Copy(FILE *Input, FILE *Output) //откуда и куда
     }
 }
 
-void enter_tag(FILE *file, struct tag *a)// ввод начального хэдера
+void enter_tag(FILE *file, struct tag *a)
 {
     fscanf(file, "%c%c%c", &(a->id[0]), &(a->id[1]), &(a->id[2]));
     char temp;
@@ -40,7 +40,7 @@ void enter_tag(FILE *file, struct tag *a)// ввод начального хэдера
     a->size = (int)t4 + 128 * (int)t3 + 128 * 128 * (int)t2 + 128 * 128 * 128 *(int)t1;
 }
 
-void enter_frame(FILE *file,struct frame *a)// ввод фрэйма
+void enter_frame(FILE *file,struct frame *a)
 {
     fscanf(file, "%c%c%c%c", &(a->name[0]), &(a->name[1]), &(a->name[2]), &(a->name[3]));
     char t1, t2, t3, t4;
@@ -49,7 +49,7 @@ void enter_frame(FILE *file,struct frame *a)// ввод фрэйма
     fscanf(file, "%c%c", &(a->f1), &(a->f2));
 }
 
-void show_frame(FILE *file, struct frame *a)//нужно вызывать после считывания. Просто вывод всего
+void show_frame(FILE *file, struct frame *a)
 {
     char t;
     for(int i = 0; i < a->size; i++)
@@ -59,16 +59,16 @@ void show_frame(FILE *file, struct frame *a)//нужно вызывать после считывания. П
     }
 }
 
-void show_all(FILE *file)//вывод всех фрэймов
+void show_all(FILE *file)
 {
-    fseek(file, 0, 0); //в самое начало
+    fseek(file, 0, 0);
     struct tag a;
     struct frame b;
     enter_tag(file, &a);
     for(int i = a.size; i > 0 ;)
     {
         enter_frame(file, &b);
-        printf("%c%c%c%c ", b.name[0], b.name[1], b.name[2], b.name[3]); //выводит теги
+        printf("%c%c%c%c ", b.name[0], b.name[1], b.name[2], b.name[3]);
         i = i - b.size - 10;
         show_frame(file, &b);
         printf("\n");
@@ -76,7 +76,7 @@ void show_all(FILE *file)//вывод всех фрэймов
     fseek(file, 0, 0);
 }
 
-void show_name(FILE *file, char *name)//вывод по тэгу
+void show_name(FILE *file, char *name)
 {
     fseek(file, 0, 0);
     struct tag a;
@@ -100,7 +100,7 @@ void show_name(FILE *file, char *name)//вывод по тэгу
     fseek(file, 0, 0);
 }
 
-void new_data(FILE *file, char *name, char *data, int dsize)//замена данных
+void new_data(FILE *file, char *name, char *data, int dsize)
 {
     fseek(file, 0, 0);
     struct tag a;
@@ -111,7 +111,7 @@ void new_data(FILE *file, char *name, char *data, int dsize)//замена данных
     for(int i = a.size; i > 0;)
     {
         enter_frame(file, &b);
-        if(b.name[0] == name[0] && b.name[1] == name[1] && b.name[2] == name[2] && b.name[3] == name[3])//адрес байта перед хэдером нужного
+        if(b.name[0] == name[0] && b.name[1] == name[1] && b.name[2] == name[2] && b.name[3] == name[3])
         {
             break;
         }
@@ -169,7 +169,7 @@ void new_data(FILE *file, char *name, char *data, int dsize)//замена данных
 
 }
 
-void copy_to_normal(FILE *file) //пересылаем новые данные в наш mp3 файл
+void copy_to_normal(FILE *file)
 {
     fseek(file, 0, 0);
     FILE *a = fopen("unknown.mp3", "rb");
@@ -210,21 +210,21 @@ int main(int argc, char *argv[])
         {
             size = sizeof(argv[i]);
             Value = strpbrk(argv[i], "=") + 1;
-            continue; //
+            continue;
         }
     }
     FILE *file = fopen(FileName, "rb");
     if (ShowFlag)
     {
-        show_all(file);//показать всё
+        show_all(file);
     }
     if (GetFlag)
     {
-        show_name(file, FrameName);//показать выбранный фрейм
+        show_name(file, FrameName);
     }
     if (SetFlag)
     {
-        new_data(file, FrameName, Value, size);//редактировать
+        new_data(file, FrameName, Value, size);
         file = fopen(FileName, "wb");
         copy_to_normal(file);
     }
