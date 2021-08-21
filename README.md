@@ -6,5 +6,5 @@
 </p>
 <p float="left">
   <img width="400" alt="pic3" src=https://user-images.githubusercontent.com/73906341/130321526-c00419b9-5327-4d2e-b491-bec7eed02521.png>
-  <img width="400" alt="pic3" src=![image](https://user-images.githubusercontent.com/73906341/130319076-cc256fb9-3360-488b-9a53-9ecefa72820b.png>
+  <img width="400" alt="pic4" src=![image](https://user-images.githubusercontent.com/73906341/130319076-cc256fb9-3360-488b-9a53-9ecefa72820b.png>
 </p>
