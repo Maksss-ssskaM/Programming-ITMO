@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1629539935 source:c:\users\maksss\desktop\gameoflife\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<direct.h>
+

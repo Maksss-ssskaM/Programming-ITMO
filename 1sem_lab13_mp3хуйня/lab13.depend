@@ -1,9 +1,0 @@
-# depslib dependency file v1.0
-1607479115 source:c:\users\Максим\desktop\lab13\main.c
-	<stdio.h>
-	<locale.h>
-
-1607940232 source:c:\users\Максим\desktop\lab13v2\main.c
-	<stdio.h>
-	<locale.h>
-
