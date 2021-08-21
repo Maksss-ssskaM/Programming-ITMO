@@ -1,62 +1,59 @@
 #include <stdio.h>
 #include <locale.h>
 
-FILE* createArchive(char* archiveName, int fileCount) //Создание архива
+FILE* createArchive(char* archiveName, int fileCount)
 {
     FILE* archive = fopen(archiveName, "wb");
-    fwrite("arh", sizeof(char), 3, archive); //Отличать свой архив от других
-    fwrite(&fileCount, sizeof(int), 1, archive); //Размер элемента//Кол-во элементов.
+    fwrite("arh", sizeof(char), 3, archive);
+    fwrite(&fileCount, sizeof(int), 1, archive);
     return archive;
 }
 
-int addFileToArchive(FILE* archive, char* fileName) //Добавляю файлы в архив
+int addFileToArchive(FILE* archive, char* fileName)
 {
     FILE* inputFile = fopen(fileName, "rb");
     if (inputFile == NULL)
     {
-        printf("Таких файлов нет %s\n", fileName);
+        printf("There are no such files. %s\n", fileName);
         return 1;
     }
 
-    // Запись имени файла
     for (unsigned long i = 0; i < strlen(fileName); ++i)
     {
         char buffer = *(fileName + i);
         fwrite(&buffer, sizeof(char), 1, archive);
     }
 
-    // Отделяет название файла
     unsigned char flagByte = 0xFF;
     fwrite(&flagByte, sizeof(char), 1, archive);
 
-    // Место под длину файла
-    char zeroByte = 0x0;                                                                                // Нулевой байт
-    long pointerOnPlaceForSize = ftell(archive);                                                        // Создаю позицию на место, куда потом
-    fwrite(&zeroByte, sizeof(unsigned long long), 1, archive);                                          // запишу размер, пока что заполняю нулями.
-    //Данные файла в байт
-    unsigned long long bytesWritten = 0; //Это длина
+    char zeroByte = 0x0;
+    long pointerOnPlaceForSize = ftell(archive);
+    fwrite(&zeroByte, sizeof(unsigned long long), 1, archive);
+
+    unsigned long long bytesWritten = 0;
     char buffer;
-    while (fread(&buffer, sizeof(char), 1, inputFile) != 0)                                              //Нахожу в цикле длину
+    while (fread(&buffer, sizeof(char), 1, inputFile) != 0)
     {
         fwrite(&buffer, sizeof(char), 1, archive);
         bytesWritten += 1;
     }
-    //Конец файла
+
     long fileEnd = ftell(archive);
-    fseek(archive, pointerOnPlaceForSize, SEEK_SET);                                                     //Возвращаюсь к буферу
-    fwrite(&bytesWritten, sizeof(unsigned long long), 1, archive);                                       //Записываю в уже зараннеее выделенные байты размер.
+    fseek(archive, pointerOnPlaceForSize, SEEK_SET);
+    fwrite(&bytesWritten, sizeof(unsigned long long), 1, archive);
     fseek(archive, fileEnd, SEEK_SET);
     return 0;
 }
 
-void extractArchive(char* archiveName) //извлечение архива
+void extractArchive(char* archiveName)
 {
     FILE* archive = fopen(archiveName, "rb");
     char* buffer = calloc(1, sizeof(char) * 3);
     fread(buffer, sizeof(char), 3, archive);
     if (strcmp(buffer, "arh") != 0)
     {
-        printf("Архив повреждён\n");
+        printf("Archive damaged.\n");
         return;
     }
 
@@ -99,17 +96,17 @@ void extractArchive(char* archiveName) //извлечение архива
     }
 }
 
-void printList(char* archiveName) //содержимое архива
+void printList(char* archiveName)
 {
     FILE* archive = fopen(archiveName, "rb");
     char* buffer = calloc(1, sizeof(char) * 3);
     fread(buffer, sizeof(char), 3, archive);
     if (strcmp(buffer, "arh") != 0)
     {
-        printf("Архив повреждён\n");
+        printf("Archive damaged.\n");
         return;
     }
-    printf("Список файлов:\n");
+    printf("List of files:\n");
     int number_of_files = 0;
     fread(&number_of_files, sizeof(int), 1, archive);
 
@@ -137,7 +134,6 @@ void printList(char* archiveName) //содержимое архива
         printf("%s\n", bufferName);
         free(bufferName);
 
-        // Пропуск данных
         unsigned long long fileSize = 0;
         fread(&fileSize, sizeof(unsigned long long), 1, archive);
         fseek(archive, fileSize, SEEK_CUR);
@@ -149,7 +145,7 @@ int main(int argc, char* argv[])
     setlocale(LC_ALL, "Russian");
     if (argc < 4)
     {
-        printf("Ложные аргументы!\nПопробуйте одну из команд:\n1) --file <archive name> --create <list_of_files>\n2)  --file <archive name> --list\n3) --file <archive name> --extract\n");
+        printf("False arguments!\n Try one of the commands:\n 1) --file <archive name> --create <list_of_files>\n 2)  --file <archive name> --list\n 3) --file <archive name> --extract\n");
     }
     char* archiveName;
     if (strcmp(argv[1], "--file") == 0)
@@ -159,13 +155,13 @@ int main(int argc, char* argv[])
     }
     else
     {
-        printf("Ложные аргументы!\nПопробуйте одну из команд:\n1) --file <archive name> --create <list_of_files>\n2)  --file <archive name> --list\n3) --file <archive name> --extract\n");
+        printf("False arguments!\n Try one of the commands:\n 1) --file <archive name> --create <list_of_files>\n 2)  --file <archive name> --list\n 3) --file <archive name> --extract\n");
         return 1;
     }
     if (strcmp(argv[3], "--extract") == 0)
     {
         extractArchive(archiveName);
-        printf("Архив %s успешно извлечён\n", archiveName);
+        printf("Archive %s extracted successfully. \n", archiveName);
     }
     else if (strcmp(argv[3], "--list") == 0)
     {
@@ -179,11 +175,11 @@ int main(int argc, char* argv[])
             addFileToArchive(archive, argv[i]);
         }
         fclose(archive);
-        printf("Архив %s успешно создан\n", archiveName);
+        printf("Archive %s created successfully. \n", archiveName);
     }
     else
     {
-        printf("Ложные аргументы!\nПопробуйте одну из команд:\n1) --file <archive name> --create <list_of_files>\n2)  --file <archive name> --list\n3) --file <archive name> --extract\n");
+        printf("False arguments!\n Try one of the commands:\n1) --file <archive name> --create <list_of_files>\n2)  --file <archive name> --list\n3) --file <archive name> --extract\n");
         return 1;
     }
     return 0;
