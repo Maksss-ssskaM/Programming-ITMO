@@ -8,6 +8,7 @@
 <p>--max_iter N (Maximum number of generations)</p>
 <p>--dump_freq N (The frequency with which the program should save generations as a 
 picture)</p>
+<p>If images do not appear, disable your antivirus.</p>
 
 ![image](https://user-images.githubusercontent.com/73906341/130318705-93e987f6-85c3-47f0-8347-a69744628648.png)
 
